@@ -1,10 +1,12 @@
 import * as fs from 'fs'
 
+let x = 13;
+let y = 13;
+
 
 export const levelBuild = function () {
-    let fs = require("fs");
-    let level = fs.readFileSync("./levels/Level1.map").toString()//.split("/n")
-    //let level = "./levels/Level 1.map";
+    let level = fs.readFileSync("./levels/Level 2.map").toString()//.split("/n")
+    console.log(level.charAt(14));
     return level;
 }
 
