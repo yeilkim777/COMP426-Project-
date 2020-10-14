@@ -6,7 +6,7 @@ let board = [];
 
 
 export const levelBuild = function () {
-    //
+    // 
     let level = fs.readFileSync("./levels/Level 2.map").toString()//.split("/n")
     let count = 0;
     for (let i = 0; i < y; i++) {
