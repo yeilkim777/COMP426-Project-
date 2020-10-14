@@ -1,1 +1,1 @@
-COMP 426 Project: Color Maze 
+COMP 426 Project: Color Maze
