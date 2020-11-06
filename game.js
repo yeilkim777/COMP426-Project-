@@ -109,8 +109,7 @@ export async function loadGame() {
                 e.preventDefault;
                 if (doneMove) {
                     doneMove = false;
-                    await move('right', doneMove).then(console.log(doneMove));
-                    console.log(board)
+                    await move('right', doneMove);
                 }
 
                 break;
@@ -194,7 +193,6 @@ export const levelBuild = function () {
 }
 
 export async function move(dirction) {
-    //make this asyn and await
     let findY;
     let findX;
 
@@ -221,7 +219,6 @@ export async function move(dirction) {
                 $(findY).find(findX).attr('class', player.x + ' filled')
                 player.x += 1;
             }
-            //$(findY).find(findX).attr('class', player.x + ' filled')
             $(findY).find(findX).attr('id', 'player')
 
         }, speed)
@@ -245,7 +242,6 @@ export async function move(dirction) {
                 $(findY).find(findX).attr('class', player.x + ' filled')
                 player.y -= 1;
             }
-            //$(findY).find(findX).attr('class', player.x + ' filled')
             $(findY).find(findX).attr('id', 'player')
         }, speed)
     } else if (dirction == 'left') {
@@ -268,7 +264,6 @@ export async function move(dirction) {
                 $(findY).find(findX).attr('class', player.x + ' filled')
                 player.x -= 1;
             }
-            //$(findY).find(findX).attr('class', player.x + ' filled')
             $(findY).find(findX).attr('id', 'player')
         }, speed)
     } else if (dirction == 'down') {
@@ -292,7 +287,6 @@ export async function move(dirction) {
                 $(findY).find(findX).attr('class', player.x + ' filled')
                 player.y += 1;
             }
-            //$(findY).find(findX).attr('class', player.x + ' filled')
             $(findY).find(findX).attr('id', 'player')
         }, speed)
     }
