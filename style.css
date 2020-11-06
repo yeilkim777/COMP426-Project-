@@ -12,6 +12,6 @@ td {
     background-color: green !important;
 }
 
-.filled {
+td.filled {
     background-color: greenyellow !important;
 }
