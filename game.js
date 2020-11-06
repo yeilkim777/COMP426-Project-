@@ -103,86 +103,36 @@ export async function loadGame() {
     const $root = $('#root')
     $root.append(levelBuild())
 
-
-    // $(document).keydown(async function (e) {
-    //     switch (e.keyCode) { // move to seperate function and make it return something
-    //         case 39:
-    //             e.preventDefault;
-    //             await move('right');
-    //             break;
-
-    //         case 38:
-    //             e.preventDefault();
-    //             await move('up');
-    //             break;
-
-    //         case 37:
-    //             e.preventDefault();
-    //             await move('left');
-    //             break;
-
-    //         case 40:
-    //             e.preventDefault();
-    //             await move('down');
-    //             break;
-    //     }
-    // })
-
-    // $(document).keydown(async function (e) {
-    //     if (doneMove) {
-    //         console.log(e.keyCode)
-
-    //         if (e.keycode == 39) {
-    //             doneMove = false;
-    //             await move('right', doneMove);
-    //         } else if (e.keycode == 38) {
-    //             doneMove = false;
-    //             await move('up', doneMove);
-    //         } else if (e.keycode == 37) {
-    //             doneMove = false;
-    //             await move('left',doneMove);
-    //         } else if (e.keycode == 40) {
-    //             doneMove = false;
-    //             await move('down',doneMove);
-    //         }
-    //     }
-    // })
-
-
     $(document).keydown(async function (e) {
         switch (e.keyCode) { // move to seperate function and make it return something
             case 39:
                 e.preventDefault;
-                if (doneMove)
-                {
+                if (doneMove) {
                     doneMove = false;
-                   move('right', doneMove); 
+                    await move('right', doneMove).then(console.log(doneMove));
+                    console.log(board)
                 }
-                console.log(doneMove);
 
                 break;
             case 38:
                 e.preventDefault;
-                if (doneMove)
-                {
+                if (doneMove) {
                     doneMove = false;
-                   move('up', doneMove); 
+                    await move('up', doneMove);
                 }
                 break;
             case 37:
                 e.preventDefault;
-                if (doneMove)
-                {
+                if (doneMove) {
                     doneMove = false;
-                   move('left', doneMove); 
+                    await move('left', doneMove);
                 }
                 break;
             case 40:
                 e.preventDefault;
-                if (doneMove)
-                {
+                if (doneMove) {
                     doneMove = false;
-                   move('down', doneMove); 
+                    await move('down', doneMove);
                 }
                 break;
         }
@@ -243,12 +193,12 @@ export const levelBuild = function () {
     return tableDiv;
 }
 
-export async function move(dirction, doneMove) {
+export async function move(dirction) {
     //make this asyn and await
     let findY;
     let findX;
 
-    let speed = 15;
+    let speed = 10;
 
     if (dirction == 'right') {
         let test = setInterval(function animate() {
@@ -261,8 +211,9 @@ export async function move(dirction, doneMove) {
                 board[player.y][player.x] = 2;
                 findY = '.' + player.y;
                 findX = '.' + player.x;
-                //$(findY).find(findX).attr('class', player.x + ' filled')
                 clearInterval(test)
+                $(findY).find(findX).attr('id', 'player')
+                return doneMove = true;
             } else if (board[player.y][player.x] >= 1) {
                 board[player.y][player.x] = 2;
                 findY = '.' + player.y;
@@ -273,10 +224,8 @@ export async function move(dirction, doneMove) {
             //$(findY).find(findX).attr('class', player.x + ' filled')
             $(findY).find(findX).attr('id', 'player')
 
-
         }, speed)
-    }
-    if (dirction == 'up') {
+    } else if (dirction == 'up') {
         let test = setInterval(function animate() {
             // color what ever space that color
             // Depending on how it is animated and logic; move one space at a time
@@ -286,8 +235,9 @@ export async function move(dirction, doneMove) {
                 board[player.y][player.x] = 2;
                 findY = '.' + player.y;
                 findX = '.' + player.x;
-                //$(findY).find(findX).attr('class', player.x + ' filled')
                 clearInterval(test)
+                $(findY).find(findX).attr('id', 'player')
+                return doneMove = true;
             } else if (board[player.y][player.x] >= 1) {
                 board[player.y][player.x] = 2;
                 findY = '.' + player.y;
@@ -298,8 +248,7 @@ export async function move(dirction, doneMove) {
             //$(findY).find(findX).attr('class', player.x + ' filled')
             $(findY).find(findX).attr('id', 'player')
         }, speed)
-    }
-    if (dirction == 'left') {
+    } else if (dirction == 'left') {
         let test = setInterval(function animate() {
             // color what ever space that color
             // Depending on how it is animated and logic; move one space at a time
@@ -309,8 +258,9 @@ export async function move(dirction, doneMove) {
                 board[player.y][player.x] = 2;
                 findY = '.' + player.y;
                 findX = '.' + player.x;
-                //$(findY).find(findX).attr('class', player.x + ' filled')
                 clearInterval(test)
+                $(findY).find(findX).attr('id', 'player')
+                return doneMove = true;
             } else if (board[player.y][player.x] >= 1) {
                 board[player.y][player.x] = 2;
                 findY = '.' + player.y;
@@ -321,8 +271,7 @@ export async function move(dirction, doneMove) {
             //$(findY).find(findX).attr('class', player.x + ' filled')
             $(findY).find(findX).attr('id', 'player')
         }, speed)
-    }
-    if (dirction == 'down') {
+    } else if (dirction == 'down') {
         let test = setInterval(function animate() {
             // color what ever space that color
             // Depending on how it is animated and logic; move one space at a time
@@ -334,6 +283,8 @@ export async function move(dirction, doneMove) {
                 findX = '.' + player.x;
                 //$(findY).find(findX).attr('class', player.x + ' filled')
                 clearInterval(test)
+                $(findY).find(findX).attr('id', 'player')
+                return doneMove = true;
             } else if (board[player.y][player.x] >= 1) {
                 board[player.y][player.x] = 2;
                 findY = '.' + player.y;
@@ -345,7 +296,4 @@ export async function move(dirction, doneMove) {
             $(findY).find(findX).attr('id', 'player')
         }, speed)
     }
-
-    doneMove = true;
-    return doneMove;
 }
