@@ -10,13 +10,13 @@ let board = [];
 let player = {
     x: 0,
     y: 0,
-    moves: 0, //May add to backend as part of scoreboard
+    moves: 0, // May add as part of scoreboard
     time: 0,
-    won: false // If true, stop the game make something pop up
+    won: false // If true, stop the game, make something pop up either going to next level or restarting the maze
 }
 
-//Backend either have text file of mazes or stored as 2d array to save processing time
-//Store minimum moves required to run checker;  
+// Backend either have text file of mazes or stored as 2d array to save processing time
+// Store minimum moves required to run checker;  
 
 board = [
     [
@@ -98,15 +98,15 @@ board = [
         '0'
     ]
 ]
-let minMove = 3; //one less than winning move, different for all boards
+let minMove = 3; // one less than winning move, different for all boards
 
-let speed = 10;
+let speed = 10; // speed of animation
 
-let doneMove = true;
+let doneMove = true; // important for one move at a time
 
-let firstMove = true;
+let firstMove = true; //variable for stopwatch
 
-let stopWatch;
+let stopWatch; // same
 
 $(function () {
     loadGame();
