@@ -1,6 +1,8 @@
 //import * as fs from 'fs'
 
-import { getLevel } from "./getLevel.js";
+//import { getLevel } from "./getLevel.js";
+
+import { levelArray } from "./getLevel.js"
 
 
 let x = 13;
@@ -12,173 +14,13 @@ let player = {
     y: 0,
     moves: 0, // May add as part of scoreboard
     time: 0,
-    won: false // If true, stop the game, make something pop up either going to next level or restarting the maze
+    won: false, // If true, stop the game, make something pop up either going to next level or restarting the maze
+    level: 1 // starting level
 }
 
 // Backend either have text file of mazes or stored as 2d array to save processing time
 // Store minimum moves required to run checker;  
 
-// board = [ // Level 1
-//     [
-//         '0', '0', '0', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '0', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '0', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '0', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '1', '1',
-//         '1', '1', '1', '1',
-//         '1', '1', '1', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '1', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '1', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '1', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '1', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '1', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '1', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '1', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '1', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '1', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '1', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '1', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '1', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '1', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '1', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '2', '1',
-//         '1', '1', '1', '1',
-//         '1', '1', '1', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '0', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '0', '0',
-//         '0'
-//     ],
-//     [
-//         '0', '0', '0', '0',
-//         '0', '0', '0', '0',
-//         '0', '0', '0', '0',
-//         '0'
-//     ]
-// ]
-
-board = [
-    [
-      '0', '0', '0', '0',
-      '0', '0', '0', '0',
-      '0', '0', '0', '0',
-      '0'
-    ],
-    [
-      '0', '0', '1', '1',
-      '1', '1', '0', '1',
-      '1', '1', '1', '0',
-      '0'
-    ],
-    [
-      '0', '0', '1', '0',
-      '1', '1', '1', '1',
-      '1', '1', '1', '1',
-      '0'
-    ],
-    [
-      '0', '0', '1', '1',
-      '1', '1', '0', '1',
-      '0', '1', '1', '1',
-      '0'
-    ],
-    [
-      '0', '0', '1', '0',
-      '0', '1', '1', '1',
-      '0', '1', '1', '1',
-      '0'
-    ],
-    [
-      '0', '0', '1', '1',
-      '1', '1', '1', '1',
-      '1', '1', '1', '1',
-      '0'
-    ],
-    [
-      '0', '0', '1', '0',
-      '1', '1', '1', '1',
-      '1', '1', '0', '1',
-      '0'
-    ],
-    [
-      '0', '0', '1', '1',
-      '1', '1', '1', '0',
-      '1', '1', '0', '1',
-      '0'
-    ],
-    [
-      '0', '0', '1', '1',
-      '0', '1', '1', '1',
-      '1', '1', '1', '1',
-      '0'
-    ],
-    [
-      '0', '0', '2', '1',
-      '1', '1', '1', '1',
-      '1', '0', '0', '1',
-      '0'
-    ],
-    [
-      '0', '0', '0', '1',
-      '1', '1', '1', '1',
-      '1', '1', '1', '1',
-      '0'
-    ],
-    [
-      '0', '0', '0', '0',
-      '0', '0', '0', '0',
-      '0', '0', '0', '0',
-      '0'
-    ],
-    [
-      '0', '0', '0', '0',
-      '0', '0', '0', '0',
-      '0', '0', '0', '0',
-      '0'
-    ]
-  ]
 let minMove = 3; // one less than winning move, different for all boards
 
 let speed = 10; // speed of animation
@@ -195,7 +37,7 @@ $(function () {
 
 export async function loadGame() {
     const $root = $('#root')
-    $root.append(levelBuild())
+    $root.append(levelBuild(player.level))
 
 
     $(document).keydown(async function (e) {
@@ -213,7 +55,7 @@ export async function loadGame() {
                         await move('right');
                     }
                 }
-                
+
                 break;
             case 38:
                 e.preventDefault;
@@ -256,12 +98,25 @@ export async function loadGame() {
                     }
                 }
                 break;
+
+            case 78: // Press N to go to next level
+                console.log('nextLevel')
+                player.level += 1; // Go to Next Level
+                player.won = false;
+                player.time = 0;
+                stopWatch = 0;
+                firstMove = true;
+                console.log(player.level)
+                $('#board').replaceWith(levelBuild(player.level)) //temp 
+
+                break;
         }
     })
 
 }
 
-export const levelBuild = function () {
+export const levelBuild = function (number) {
+    number -= 1;
 
     let tableDiv = document.createElement('div');
     tableDiv.setAttribute('id', 'board')
@@ -271,22 +126,15 @@ export const levelBuild = function () {
 
     //let level = getLevel();
     let count = 0;
+
+    board = JSON.parse(JSON.stringify(levelArray[number]))
     for (let i = 0; i < y; i++) {
-        // board[i] = [];
 
         let row = document.createElement('tr');
         row.setAttribute('class', i)
         for (let j = 0; j < x; j++) {
-            // board[i][j] = level.charAt(count);
             let rowFiller = document.createElement('td');
             rowFiller.setAttribute('class', j)
-
-            // if (board[i][j] == 2) {
-            //     player.y = i;
-            //     player.x = j;
-            //     rowFiller.setAttribute('id', 'player')
-            // }
-
 
             if (board[i][j] == 0) {
                 rowFiller.setAttribute('style', 'background-color: gray');
@@ -305,10 +153,10 @@ export const levelBuild = function () {
 
             row.append(rowFiller);
 
-            count++;
+            //count++;
         }
         tableDiv.append(row);
-        count += 2;
+        //count += 2;
     }
     return tableDiv;
 }
@@ -335,7 +183,7 @@ export async function move(dirction) {
                     if (player.won) {
                         console.log('Won')
                         stopWatch = Date.now() - stopWatch;
-                        player.time = stopWatch/1000;
+                        player.time = stopWatch / 1000;
                         console.log(player.time);
                     }
                 }
@@ -369,7 +217,7 @@ export async function move(dirction) {
                     if (player.won) {
                         console.log('Won')
                         stopWatch = Date.now() - stopWatch;
-                        player.time = stopWatch/1000;
+                        player.time = stopWatch / 1000;
                         console.log(player.time);
                     }
                 }
@@ -402,8 +250,9 @@ export async function move(dirction) {
                     if (player.won) {
                         console.log('Won')
                         stopWatch = Date.now() - stopWatch;
-                        player.time = stopWatch/1000;
-                        console.log(player.time);                    }
+                        player.time = stopWatch / 1000;
+                        console.log(player.time);
+                    }
                 }
 
                 return doneMove = true;
@@ -435,8 +284,9 @@ export async function move(dirction) {
                     if (player.won) {
                         console.log('Won')
                         stopWatch = Date.now() - stopWatch;
-                        player.time = stopWatch/1000;
-                        console.log(player.time);                    }
+                        player.time = stopWatch / 1000;
+                        console.log(player.time);
+                    }
                 }
 
                 return doneMove = true;
