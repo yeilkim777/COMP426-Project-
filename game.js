@@ -10,6 +10,7 @@ let y = 13;
 let board = [];
 
 let player = {
+    name: 'Philip Kim',
     x: 0,
     y: 0,
     moves: 0, // May add as part of scoreboard
@@ -17,9 +18,6 @@ let player = {
     won: false, // If true, stop the game, make something pop up either going to next level or restarting the maze
     level: 1 // starting level
 }
-
-// Backend either have text file of mazes or stored as 2d array to save processing time
-// Store minimum moves required to run checker;  
 
 let minMove = 3; // one less than winning move, different for all boards
 
@@ -31,6 +29,7 @@ let firstMove = true; //variable for stopwatch
 
 let stopWatch; // same
 
+
 $(function () {
     loadGame();
 })
@@ -38,6 +37,10 @@ $(function () {
 export async function loadGame() {
     const $root = $('#root')
     $root.append(levelBuild(player.level))
+    let timeScoreBoard = await getBoard(player.level, "time");
+    let moveScoreBoard = await getBoard(player.level, "move");
+    console.log(timeScoreBoard)
+
 
 
     $(document).keydown(async function (e) {
@@ -104,12 +107,38 @@ export async function loadGame() {
                 player.level += 1; // Go to Next Level
                 player.won = false;
                 player.time = 0;
+                player.moves = 0;
                 stopWatch = 0;
                 firstMove = true;
                 console.log(player.level)
+                timeScoreBoard = await getBoard(player.level, "time")
+                console.log(timeScoreBoard)
                 $('#board').replaceWith(levelBuild(player.level)) //temp 
 
                 break;
+            // turn these into functions
+            case 82: // Press R to reset level
+                console.log('reset Level')
+                player.won = false;
+                player.time = 0;
+                player.moves = 0;
+                stopWatch = 0;
+                firstMove = true;
+                console.log(player.level)
+                $('#board').replaceWith(levelBuild(player.level))
+                break
+            case 69: // Press E to enter level
+                timeScoreBoard.push({
+                    "player": player.name,
+                    "time": player.time,
+                    "moves": player.moves
+                })
+                await updateBoard(player.level, 'time', timeScoreBoard)
+                break
+            case 84: //Press t to print time array
+                let updateTest = await getBoard(player.level, 'time')
+                console.log(updateTest)
+                break
         }
     })
 
@@ -312,4 +341,65 @@ export const boardChecker = function () {
         }
     }
     return player.won = true;
+}
+
+export async function getBoard(id, type) {
+    let getURL = "http://localhost:3000/" + type + "/" + id;
+    const result = await axios({
+        method: 'get',
+        url: getURL,
+
+    })
+    return result.data;
+}
+
+export async function updateBoard(id, type, array) {
+    let updateURL = "http://localhost:3000/" + type + "/" + id;
+    const result = await axios({
+        method: 'put',
+        url: updateURL,
+        data: {
+            body: array
+        }
+    })
+}
+
+export const resetBoard = function () {
+    console.log('reset Level')
+    //player.level += 1; // Go to Next Level
+    player.won = false;
+    player.time = 0;
+    player.moves = 0;
+    stopWatch = 0;
+    firstMove = true;
+    console.log(player.level)
+    $('#board').replaceWith(levelBuild(player.level))
+}
+
+export async function nextLevel() {
+    console.log('nextLevel')
+    player.level += 1; // Go to Next Level
+    player.won = false;
+    player.time = 0;
+    player.moves = 0;
+    stopWatch = 0;
+    firstMove = true;
+    console.log(player.level)
+    test = await getBoard(player.level, "time")
+    console.log(test)
+    $('#board').replaceWith(levelBuild(player.level)) //temp 
+}
+
+export async function handleUpdateBoard() {
+    test.push({
+        "player": player.name,
+        "time": player.time,
+        "moves": player.moves
+    })
+    await updateBoard(player.level, 'time', test)
+}
+
+export async function getMostRecent() {//Might not be needed
+    test = await getBoard(player.level, 'time')
+    console.log(updateTest)
 }
