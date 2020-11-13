@@ -21,7 +21,7 @@ app.get('/time/:id', (req,res) => {  // id is level number
     if (stringID < 1 || stringID > 20) {
         res.status(404).send("Level does not exist")
     } else {
-        res.json(Rank.getTimeRank(stringID));
+        return res.json(Rank.getTimeRank(stringID));
     }
     return 
 }) 
@@ -33,7 +33,7 @@ app.get('/move/:id', (req,res) => {  // id is level number
     if (stringID < 1 || stringID > 20) {
         res.status(404).send("Level does not exist")
     } else {
-        res.json(Rank.getMoveRank(stringID));
+        return res.json(Rank.getMoveRank(stringID));
     }
     return 
 }) 

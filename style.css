@@ -21,3 +21,14 @@ td {
 td.filled {
     background-color: greenyellow !important;
 }
+
+/* Panel and buttons */
+
+#buttonPanel {
+    width: 650px;
+}
+
+button {
+    width: 100px;
+    height: 75px
+}

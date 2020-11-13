@@ -2,6 +2,7 @@
 
 //import { getLevel } from "./getLevel.js";
 
+//import { getTimeRank } from "./backend/Rank.js";
 import { levelArray } from "./getLevel.js"
 
 
@@ -13,7 +14,7 @@ let player = {
     name: 'Philip Kim',
     x: 0,
     y: 0,
-    moves: 0, // May add as part of scoreboard
+    moves: 0,
     time: 0,
     won: false, // If true, stop the game, make something pop up either going to next level or restarting the maze
     level: 1 // starting level
@@ -28,20 +29,21 @@ let doneMove = true; // important for one move at a time
 let firstMove = true; //variable for stopwatch
 
 let stopWatch; // same
-
+let timeScoreBoard = []
+let moveScoreBoard = []
 
 $(function () {
     loadGame();
 })
 
 export async function loadGame() {
+    
     const $root = $('#root')
     $root.append(levelBuild(player.level))
-    let timeScoreBoard = await getBoard(player.level, "time");
-    let moveScoreBoard = await getBoard(player.level, "move");
-    console.log(timeScoreBoard)
-
-
+    timeScoreBoard = await getTimeBoard(player.level);
+    moveScoreBoard = await getMoveBoard(player.level);
+    console.log(timeScoreBoard);
+    console.log(moveScoreBoard);
 
     $(document).keydown(async function (e) {
         switch (e.keyCode) { // move to seperate function and make it return something
@@ -134,6 +136,7 @@ export async function loadGame() {
                     "moves": player.moves
                 })
                 await updateBoard(player.level, 'time', timeScoreBoard)
+                //timeScoreBoard = await getBoard(player.level, "time")
                 break
             case 84: //Press t to print time array
                 let updateTest = await getBoard(player.level, 'time')
@@ -141,6 +144,20 @@ export async function loadGame() {
                 break
         }
     })
+
+    $root.append(`<div id = 'buttonPanel'>
+        <button id = 'previous'> Previous</button>
+        <button id = 'reset'>Reset</button>
+        <button id = 'next'>Next</button>
+        <button id = 'time'>Save Time</button>
+        <button id = 'move'>Save Move</button>
+    </div>`)
+
+    $root.on('click', "#previous", previousBoard);
+    $root.on('click', "#reset", resetBoard);
+    $root.on('click', "#next", nextLevel);
+    $root.on('click', "#time", timeUpdateBoard);
+    $root.on('click', "#move", moveUpdateBoard);
 
 }
 
@@ -343,14 +360,22 @@ export const boardChecker = function () {
     return player.won = true;
 }
 
-export async function getBoard(id, type) {
-    let getURL = "http://localhost:3000/" + type + "/" + id;
+export async function getTimeBoard(id, type) {
+    let getURL = "http://localhost:3000/time/" + id;
     const result = await axios({
         method: 'get',
         url: getURL,
-
     })
-    return result.data;
+    return result.data.body;
+}
+
+export async function getMoveBoard(id, type) {
+    let getURL = "http://localhost:3000/move/" + id;
+    const result = await axios({
+        method: 'get',
+        url: getURL,
+    })
+    return result.data.body;
 }
 
 export async function updateBoard(id, type, array) {
@@ -362,6 +387,20 @@ export async function updateBoard(id, type, array) {
             body: array
         }
     })
+}
+
+export async function previousBoard() {
+    console.log('previousLevel')
+    player.level -= 1; // Go to Next Level
+    player.won = false;
+    player.time = 0;
+    player.moves = 0;
+    stopWatch = 0;
+    firstMove = true;
+    console.log(player.level)
+    timeScoreBoard = await getTimeBoard(player.level);
+    moveScoreBoard = await getMoveBoard(player.level);
+    $('#board').replaceWith(levelBuild(player.level))
 }
 
 export const resetBoard = function () {
@@ -385,21 +424,38 @@ export async function nextLevel() {
     stopWatch = 0;
     firstMove = true;
     console.log(player.level)
-    test = await getBoard(player.level, "time")
-    console.log(test)
-    $('#board').replaceWith(levelBuild(player.level)) //temp 
+    timeScoreBoard = await getTimeBoard(player.level);
+    moveScoreBoard = await getMoveBoard(player.level);
+    console.log(timeScoreBoard)
+    console.log(moveScoreBoard)
+    $('#board').replaceWith(levelBuild(player.level))
 }
 
-export async function handleUpdateBoard() {
-    test.push({
+export async function timeUpdateBoard() {
+    let test = {
         "player": player.name,
         "time": player.time,
-        "moves": player.moves
-    })
-    await updateBoard(player.level, 'time', test)
+    }
+    timeScoreBoard.push(test)
+    await updateBoard(player.level, "time", timeScoreBoard)
+
+    timeScoreBoard = await getTimeBoard(player.level);
+    console.log(timeScoreBoard);
 }
 
-export async function getMostRecent() {//Might not be needed
-    test = await getBoard(player.level, 'time')
-    console.log(updateTest)
+export async function moveUpdateBoard() {
+    moveScoreBoard.push({
+        "player": player.name,
+        "moves": player.moves,
+    })
+
+    let blank = await updateBoard(player.level, 'move', moveScoreBoard)
+    // Add rank field
+    moveScoreBoard = await getMoveBoard(player.level);
+    console.log(moveScoreBoard);
 }
+
+// export async function getMostRecent() {//Might not be needed
+//     test = await getBoard(player.level, 'time')
+//     console.log(updateTest)
+// }
