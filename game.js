@@ -37,7 +37,7 @@ $(function () {
 })
 
 export async function loadGame() {
-    
+
     const $root = $('#root')
     $root.append(levelBuild(player.level))
     timeScoreBoard = await getTimeBoard(player.level);
@@ -106,42 +106,27 @@ export async function loadGame() {
 
             case 78: // Press N to go to next level
                 console.log('nextLevel')
-                player.level += 1; // Go to Next Level
-                player.won = false;
-                player.time = 0;
-                player.moves = 0;
-                stopWatch = 0;
-                firstMove = true;
-                console.log(player.level)
-                timeScoreBoard = await getBoard(player.level, "time")
-                console.log(timeScoreBoard)
-                $('#board').replaceWith(levelBuild(player.level)) //temp 
+                nextLevel()
 
                 break;
             // turn these into functions
             case 82: // Press R to reset level
                 console.log('reset Level')
-                player.won = false;
-                player.time = 0;
-                player.moves = 0;
-                stopWatch = 0;
-                firstMove = true;
-                console.log(player.level)
-                $('#board').replaceWith(levelBuild(player.level))
+                resetBoard()
                 break
-            case 69: // Press E to enter level
-                timeScoreBoard.push({
-                    "player": player.name,
-                    "time": player.time,
-                    "moves": player.moves
-                })
-                await updateBoard(player.level, 'time', timeScoreBoard)
-                //timeScoreBoard = await getBoard(player.level, "time")
-                break
-            case 84: //Press t to print time array
-                let updateTest = await getBoard(player.level, 'time')
-                console.log(updateTest)
-                break
+            // case 69: // Press E to enter level
+            //     timeScoreBoard.push({
+            //         "player": player.name,
+            //         "time": player.time,
+            //         "moves": player.moves
+            //     })
+            //     await updateBoard(player.level, 'time', timeScoreBoard)
+            //     //timeScoreBoard = await getBoard(player.level, "time")
+            //     break
+            // case 84: //Press t to print time array
+            //     let updateTest = await getBoard(player.level, 'time')
+            //     console.log(updateTest)
+            //     break
         }
     })
 
@@ -390,17 +375,19 @@ export async function updateBoard(id, type, array) {
 }
 
 export async function previousBoard() {
-    console.log('previousLevel')
-    player.level -= 1; // Go to Next Level
-    player.won = false;
-    player.time = 0;
-    player.moves = 0;
-    stopWatch = 0;
-    firstMove = true;
-    console.log(player.level)
-    timeScoreBoard = await getTimeBoard(player.level);
-    moveScoreBoard = await getMoveBoard(player.level);
-    $('#board').replaceWith(levelBuild(player.level))
+    if (player.level - 1 != 0) {
+        console.log('previousLevel')
+        player.level -= 1; // Go to Next Level
+        player.won = false;
+        player.time = 0;
+        player.moves = 0;
+        stopWatch = 0;
+        firstMove = true;
+        console.log(player.level)
+        timeScoreBoard = await getTimeBoard(player.level);
+        moveScoreBoard = await getMoveBoard(player.level);
+        $('#board').replaceWith(levelBuild(player.level))
+    }
 }
 
 export const resetBoard = function () {
@@ -416,19 +403,21 @@ export const resetBoard = function () {
 }
 
 export async function nextLevel() {
-    console.log('nextLevel')
-    player.level += 1; // Go to Next Level
-    player.won = false;
-    player.time = 0;
-    player.moves = 0;
-    stopWatch = 0;
-    firstMove = true;
-    console.log(player.level)
-    timeScoreBoard = await getTimeBoard(player.level);
-    moveScoreBoard = await getMoveBoard(player.level);
-    console.log(timeScoreBoard)
-    console.log(moveScoreBoard)
-    $('#board').replaceWith(levelBuild(player.level))
+    if (player.level + 1 != 21) {
+        console.log('nextLevel')
+        player.level += 1; // Go to Next Level
+        player.won = false;
+        player.time = 0;
+        player.moves = 0;
+        stopWatch = 0;
+        firstMove = true;
+        console.log(player.level)
+        timeScoreBoard = await getTimeBoard(player.level);
+        moveScoreBoard = await getMoveBoard(player.level);
+        console.log(timeScoreBoard)
+        console.log(moveScoreBoard)
+        $('#board').replaceWith(levelBuild(player.level))
+    }
 }
 
 export async function timeUpdateBoard() {
