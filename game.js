@@ -1,8 +1,3 @@
-//import * as fs from 'fs'
-
-//import { getLevel } from "./getLevel.js";
-
-//import { getTimeRank } from "./backend/Rank.js";
 import { levelArray } from "./getLevel.js"
 
 
@@ -20,17 +15,19 @@ let player = {
     level: 1 // starting level
 }
 
-let minMove = 3; // one less than winning move, different for all boards
+let minMove = 3; 
 
 let speed = 10; // speed of animation
 
 let doneMove = true; // important for one move at a time
 
 let firstMove = true; //variable for stopwatch
-
 let stopWatch; // same
-let timeScoreBoard = []
-let moveScoreBoard = []
+
+let timeScoreBoard = [] //contains player object {player: name, time: 000}
+let moveScoreBoard = [] //contains player object {player: name, moves: 000}
+//There is a dummy object in each array
+//can add in rank element or something, but you must add it to all the dummy objects
 
 $(function () {
     loadGame();
@@ -138,11 +135,12 @@ export async function loadGame() {
         <button id = 'move'>Save Move</button>
     </div>`)
 
-    $root.on('click', "#previous", previousBoard);
+    $root.on('click', "#previous", previousBoard);//self explantory
     $root.on('click', "#reset", resetBoard);
     $root.on('click', "#next", nextLevel);
-    $root.on('click', "#time", timeUpdateBoard);
-    $root.on('click', "#move", moveUpdateBoard);
+    $root.on('click', "#time", timeUpdateBoard);//add in new player object to the array, it also returns the updated array
+    $root.on('click', "#move", moveUpdateBoard);//add in new player object to the array, it also returns the updated array
+    
 
 }
 
@@ -345,7 +343,7 @@ export const boardChecker = function () {
     return player.won = true;
 }
 
-export async function getTimeBoard(id, type) {
+export async function getTimeBoard(id) {
     let getURL = "http://localhost:3000/time/" + id;
     const result = await axios({
         method: 'get',
@@ -354,7 +352,7 @@ export async function getTimeBoard(id, type) {
     return result.data.body;
 }
 
-export async function getMoveBoard(id, type) {
+export async function getMoveBoard(id) {
     let getURL = "http://localhost:3000/move/" + id;
     const result = await axios({
         method: 'get',
@@ -439,12 +437,6 @@ export async function moveUpdateBoard() {
     })
 
     let blank = await updateBoard(player.level, 'move', moveScoreBoard)
-    // Add rank field
     moveScoreBoard = await getMoveBoard(player.level);
     console.log(moveScoreBoard);
 }
-
-// export async function getMostRecent() {//Might not be needed
-//     test = await getBoard(player.level, 'time')
-//     console.log(updateTest)
-// }
