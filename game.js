@@ -36,6 +36,7 @@ $(function () {
 export async function loadGame() {
 
     const $root = $('#root')
+    //div id = board width 650px, no margin
     $root.append(levelBuild(player.level))
     timeScoreBoard = await getTimeBoard(player.level);
     moveScoreBoard = await getMoveBoard(player.level);
@@ -102,28 +103,13 @@ export async function loadGame() {
                 break;
 
             case 78: // Press N to go to next level
-                console.log('nextLevel')
                 nextLevel()
 
                 break;
             // turn these into functions
             case 82: // Press R to reset level
-                console.log('reset Level')
                 resetBoard()
                 break
-            // case 69: // Press E to enter level
-            //     timeScoreBoard.push({
-            //         "player": player.name,
-            //         "time": player.time,
-            //         "moves": player.moves
-            //     })
-            //     await updateBoard(player.level, 'time', timeScoreBoard)
-            //     //timeScoreBoard = await getBoard(player.level, "time")
-            //     break
-            // case 84: //Press t to print time array
-            //     let updateTest = await getBoard(player.level, 'time')
-            //     console.log(updateTest)
-            //     break
         }
     })
 
@@ -140,7 +126,7 @@ export async function loadGame() {
     $root.on('click', "#next", nextLevel);
     $root.on('click', "#time", timeUpdateBoard);//add in new player object to the array, it also returns the updated array
     $root.on('click', "#move", moveUpdateBoard);//add in new player object to the array, it also returns the updated array
-    
+    // create keyboard functionality all of them
 
 }
 
