@@ -407,7 +407,7 @@ export async function moveUpdateBoard() {
         "moves": player.moves,
     })
 
-    let blank = await updateBoard(player.level, 'move', moveScoreBoard)
+    await updateBoard(player.level, 'move', moveScoreBoard)
     moveScoreBoard = await getMoveBoard(player.level);
     console.log(moveScoreBoard);
 }
