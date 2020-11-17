@@ -64,16 +64,16 @@ export async function loadGame() {
                             const $timeboard = $('#timeboard');
                             $timeboard.empty();
                             $timeboard.append(`<h1>Time: ${gjh}</h1>`);
-                        }, 100);
+                        }, 1);
                     }
                     if (doneMove) {
                         doneMove = false;
-                        player.moves += 1
+                        if (board[player.y][player.x + 1] != 0) {
+                            player.moves +=1;
+                        }
                         const $moveboard = $('#moveboard');
                         $moveboard.empty();
                         $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
-
-
                         await move('right');
                     }
                 }
@@ -92,15 +92,16 @@ export async function loadGame() {
                             const $timeboard = $('#timeboard');
                             $timeboard.empty();
                             $timeboard.append(`<h1>Time: ${gjh}</h1>`);
-                        }, 100);
+                        }, 1);
                     }
                     if (doneMove) {
                         doneMove = false;
-                        player.moves += 1
+                        if (board[player.y - 1][player.x] != 0) {
+                            player.moves += 1
+                        }
                         const $moveboard = $('#moveboard');
                         $moveboard.empty();
                         $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
-
                         await move('up');
                     }
                 }
@@ -117,11 +118,13 @@ export async function loadGame() {
                             const $timeboard = $('#timeboard');
                             $timeboard.empty();
                             $timeboard.append(`<h1>Time: ${gjh}</h1>`);
-                        }, 100);
+                        }, 1);
                     }
                     if (doneMove) {
                         doneMove = false;
-                        player.moves += 1
+                        if (board[player.y][player.x - 1] != 0) {
+                            player.moves += 1
+                        }
                         const $moveboard = $('#moveboard');
                         $moveboard.empty();
                         $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
@@ -143,15 +146,17 @@ export async function loadGame() {
                             const $timeboard = $('#timeboard');
                             $timeboard.empty();
                             $timeboard.append(`<h1>Time: ${gjh}</h1>`);
-                        }, 100);
+                        }, 1);
                     }
                     if (doneMove) {
                         doneMove = false;
-                        player.moves += 1
+                        if (board[player.y + 1][player.x] != 0) {
+                            player.moves += 1
+                        }
+                        
                         const $moveboard = $('#moveboard');
                         $moveboard.empty();
                         $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
-
                         await move('down');
                     }
                 }
