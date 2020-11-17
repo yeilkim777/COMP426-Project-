@@ -1,4 +1,5 @@
 import { levelArray } from "./getLevel.js"
+import { boardGet , boardSet} from "./backend-firestore.js"
 
 
 let x = 13;
@@ -15,7 +16,7 @@ let player = {
     level: 1 // starting level
 }
 
-let minMove = 3; 
+let minMove = 3;
 
 let speed = 10; // speed of animation
 
@@ -37,9 +38,9 @@ export async function loadGame() {
 
     const $root = $('#root')
     //div id = board width 650px, no margin
-    $root.append(levelBuild(player.level))
     timeScoreBoard = await getTimeBoard(player.level);
     moveScoreBoard = await getMoveBoard(player.level);
+    $root.append(levelBuild(player.level))
     console.log(timeScoreBoard);
     console.log(moveScoreBoard);
 
@@ -126,6 +127,8 @@ export async function loadGame() {
     $root.on('click', "#next", nextLevel);
     $root.on('click', "#time", timeUpdateBoard);//add in new player object to the array, it also returns the updated array
     $root.on('click', "#move", moveUpdateBoard);//add in new player object to the array, it also returns the updated array
+
+
     // create keyboard functionality all of them
 
 }
@@ -330,32 +333,15 @@ export const boardChecker = function () {
 }
 
 export async function getTimeBoard(id) {
-    let getURL = "http://localhost:3000/time/" + id;
-    const result = await axios({
-        method: 'get',
-        url: getURL,
-    })
-    return result.data.body;
+    return await boardGet(id, 'time');
 }
 
 export async function getMoveBoard(id) {
-    let getURL = "http://localhost:3000/move/" + id;
-    const result = await axios({
-        method: 'get',
-        url: getURL,
-    })
-    return result.data.body;
+    return await boardGet(id, 'move');
 }
 
 export async function updateBoard(id, type, array) {
-    let updateURL = "http://localhost:3000/" + type + "/" + id;
-    const result = await axios({
-        method: 'put',
-        url: updateURL,
-        data: {
-            body: array
-        }
-    })
+    const result = await boardSet(id, type, array);
 }
 
 export async function previousBoard() {
@@ -411,7 +397,6 @@ export async function timeUpdateBoard() {
     }
     timeScoreBoard.push(test)
     await updateBoard(player.level, "time", timeScoreBoard)
-
     timeScoreBoard = await getTimeBoard(player.level);
     console.log(timeScoreBoard);
 }
