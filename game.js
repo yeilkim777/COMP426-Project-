@@ -1,5 +1,5 @@
 import { levelArray } from "./getLevel.js"
-import { boardGet , boardSet} from "./backend-firestore.js"
+import { boardGet, boardSet } from "./backend-firestore.js"
 
 
 let x = 13;
@@ -34,6 +34,8 @@ $(function () {
     loadGame();
 })
 
+let myTime = null;
+
 export async function loadGame() {
 
     const $root = $('#root')
@@ -44,6 +46,8 @@ export async function loadGame() {
     console.log(timeScoreBoard);
     console.log(moveScoreBoard);
 
+
+
     $(document).keydown(async function (e) {
         switch (e.keyCode) { // move to seperate function and make it return something
             case 39:
@@ -52,10 +56,24 @@ export async function loadGame() {
                     if (firstMove) {
                         stopWatch = Date.now();
                         firstMove = false;
+
+
+                        myTime = window.setInterval(function () {
+
+                            let gjh = (Date.now() - stopWatch) / 1000
+                            const $timeboard = $('#timeboard');
+                            $timeboard.empty();
+                            $timeboard.append(`<h1>Time: ${gjh}</h1>`);
+                        }, 100);
                     }
                     if (doneMove) {
                         doneMove = false;
                         player.moves += 1
+                        const $moveboard = $('#moveboard');
+                        $moveboard.empty();
+                        $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
+
+
                         await move('right');
                     }
                 }
@@ -67,10 +85,22 @@ export async function loadGame() {
                     if (firstMove) {
                         stopWatch = Date.now();
                         firstMove = false;
+
+                        myTime = window.setInterval(function () {
+
+                            let gjh = (Date.now() - stopWatch) / 1000
+                            const $timeboard = $('#timeboard');
+                            $timeboard.empty();
+                            $timeboard.append(`<h1>Time: ${gjh}</h1>`);
+                        }, 100);
                     }
                     if (doneMove) {
                         doneMove = false;
                         player.moves += 1
+                        const $moveboard = $('#moveboard');
+                        $moveboard.empty();
+                        $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
+
                         await move('up');
                     }
                 }
@@ -80,10 +110,22 @@ export async function loadGame() {
                     if (firstMove) {
                         stopWatch = Date.now();
                         firstMove = false;
+
+                        myTime = window.setInterval(function () {
+
+                            let gjh = (Date.now() - stopWatch) / 1000
+                            const $timeboard = $('#timeboard');
+                            $timeboard.empty();
+                            $timeboard.append(`<h1>Time: ${gjh}</h1>`);
+                        }, 100);
                     }
                     if (doneMove) {
                         doneMove = false;
                         player.moves += 1
+                        const $moveboard = $('#moveboard');
+                        $moveboard.empty();
+                        $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
+
                         await move('left');
                     }
                 }
@@ -94,10 +136,22 @@ export async function loadGame() {
                     if (firstMove) {
                         stopWatch = Date.now();
                         firstMove = false;
+
+                        myTime = window.setInterval(function () {
+
+                            let gjh = (Date.now() - stopWatch) / 1000
+                            const $timeboard = $('#timeboard');
+                            $timeboard.empty();
+                            $timeboard.append(`<h1>Time: ${gjh}</h1>`);
+                        }, 100);
                     }
                     if (doneMove) {
                         doneMove = false;
                         player.moves += 1
+                        const $moveboard = $('#moveboard');
+                        $moveboard.empty();
+                        $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
+
                         await move('down');
                     }
                 }
@@ -120,6 +174,14 @@ export async function loadGame() {
         <button id = 'next'>Next</button>
         <button id = 'time'>Save Time</button>
         <button id = 'move'>Save Move</button>
+    </div>`)
+
+    $root.append(`<div id = 'moveboard'>
+        <h1>Moves: ${player.moves}</h1>
+    </div>`)
+
+    $root.append(`<div id = 'timeboard'>
+        <h1>Time: ${player.time}</h1>
     </div>`)
 
     $root.on('click', "#previous", previousBoard);//self explantory
@@ -200,8 +262,13 @@ export async function move(dirction) {
                     player.won = boardChecker()
                     if (player.won) {
                         console.log('Won')
+                        
                         stopWatch = Date.now() - stopWatch;
+                        clearInterval(myTime);
                         player.time = stopWatch / 1000;
+                        const $timeboard = $('#timeboard');
+                        $timeboard.empty();
+                        $timeboard.append(`<h1>Time: ${player.time}</h1>`);
                         console.log(player.time);
                     }
                 }
@@ -234,8 +301,13 @@ export async function move(dirction) {
                     player.won = boardChecker()
                     if (player.won) {
                         console.log('Won')
+                
                         stopWatch = Date.now() - stopWatch;
+                        clearInterval(myTime);
                         player.time = stopWatch / 1000;
+                        const $timeboard = $('#timeboard');
+                        $timeboard.empty();
+                        $timeboard.append(`<h1>Time: ${player.time}</h1>`);
                         console.log(player.time);
                     }
                 }
@@ -267,8 +339,13 @@ export async function move(dirction) {
                     player.won = boardChecker()
                     if (player.won) {
                         console.log('Won')
+                        
                         stopWatch = Date.now() - stopWatch;
+                        clearInterval(myTime);
                         player.time = stopWatch / 1000;
+                        const $timeboard = $('#timeboard');
+                        $timeboard.empty();
+                        $timeboard.append(`<h1>Time: ${player.time}</h1>`);
                         console.log(player.time);
                     }
                 }
@@ -301,8 +378,13 @@ export async function move(dirction) {
                     player.won = boardChecker();
                     if (player.won) {
                         console.log('Won')
+                        
                         stopWatch = Date.now() - stopWatch;
+                        clearInterval(myTime);
                         player.time = stopWatch / 1000;
+                        const $timeboard = $('#timeboard');
+                        $timeboard.empty();
+                        $timeboard.append(`<h1>Time: ${player.time}</h1>`);
                         console.log(player.time);
                     }
                 }
@@ -354,6 +436,13 @@ export async function previousBoard() {
         stopWatch = 0;
         firstMove = true;
         console.log(player.level)
+        clearInterval(myTime);
+        const $timeboard = $('#timeboard');
+        $timeboard.empty();
+        $timeboard.append(`<h1>Time: ${player.time}</h1>`);
+        const $moveboard = $('#moveboard');
+        $moveboard.empty();
+        $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
         timeScoreBoard = await getTimeBoard(player.level);
         moveScoreBoard = await getMoveBoard(player.level);
         $('#board').replaceWith(levelBuild(player.level))
@@ -368,6 +457,13 @@ export const resetBoard = function () {
     player.moves = 0;
     stopWatch = 0;
     firstMove = true;
+    clearInterval(myTime);
+    const $timeboard = $('#timeboard');
+    $timeboard.empty();
+    $timeboard.append(`<h1>Time: ${player.time}</h1>`);
+    const $moveboard = $('#moveboard');
+    $moveboard.empty();
+    $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
     console.log(player.level)
     $('#board').replaceWith(levelBuild(player.level))
 }
@@ -381,6 +477,13 @@ export async function nextLevel() {
         player.moves = 0;
         stopWatch = 0;
         firstMove = true;
+        clearInterval(myTime);
+        const $timeboard = $('#timeboard');
+        $timeboard.empty();
+        $timeboard.append(`<h1>Time: ${player.time}</h1>`);
+        const $moveboard = $('#moveboard');
+        $moveboard.empty();
+        $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
         console.log(player.level)
         timeScoreBoard = await getTimeBoard(player.level);
         moveScoreBoard = await getMoveBoard(player.level);

@@ -21,7 +21,7 @@ const database = firebase.firestore();
 //             'body':[{"player": "Philip Kim", "time": 1.780},{"player": "Tiger", "time": 0.80}]
 //         })
 //         await database.collection(set).doc('move').set({
-//             'body':[{"player": "Philip Kim", "moves": 4},{"player": "Tiger", "move": 4}]
+//             'body':[{"player": "Philip Kim", "moves": 4},{"player": "Tiger", "moves": 4}]
 //         })
 //     }
 // }
