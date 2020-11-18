@@ -8,7 +8,7 @@ let y = 13;
 let board = [];
 
 let player = {
-    name: firebaseUser.email,
+    name: substring(0,firebaseUser.email.indexOf('@')),
     x: 0,
     y: 0,
     moves: 0,
