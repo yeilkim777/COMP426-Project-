@@ -1,5 +1,6 @@
 import { levelArray } from "./getLevel.js"
 import { boardGet, boardSet } from "./backend-firestore.js"
+import "./login.js"
 
 
 let x = 13;
@@ -7,7 +8,7 @@ let y = 13;
 let board = [];
 
 let player = {
-    name: 'Philip Kim',
+    name: firebaseUser.email,
     x: 0,
     y: 0,
     moves: 0,
