@@ -1,6 +1,6 @@
 import { levelArray } from "./getLevel.js"
 import { boardGet, boardSet } from "./backend-firestore.js"
-import "./login.js"
+import "./login/login.js"
 
 
 let x = 13;

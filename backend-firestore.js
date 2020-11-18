@@ -18,10 +18,10 @@ const database = firebase.firestore();
 //     for (let i = 1; i <= 20; i ++) {
 //         let set = i.toString()
 //         await database.collection(set).doc('time').set({
-//             'body':[{"player": "Philip Kim", "time": 1.780},{"player": "Tiger", "time": 0.80}]
+//             'body':[]
 //         })
 //         await database.collection(set).doc('move').set({
-//             'body':[{"player": "Philip Kim", "moves": 4},{"player": "Tiger", "moves": 4}]
+//             'body':[]
 //         })
 //     }
 // }
