@@ -1,5 +1,4 @@
-
-(function() {
+export function loginapi() {
 
 
     firebase.auth().signOut();
@@ -18,7 +17,7 @@
         // sign in 
         const promise = auth.signInWithEmailAndPassword(email, password);
         promise.catch(e => console.log(e.message));
-    })
+    });
 
     btnSignUp.addEventListener('click', e => {
         // get email and pass
@@ -30,22 +29,22 @@
         const promise = auth.createUserWithEmailAndPassword(email, password);
         promise.catch(e => console.log(e.message));
 
-    })
+    });
 
     btnLogout.addEventListener('click', e => {
         firebase.auth().signOut();
-    })
+    });
 
     // realtime auth listener
     firebase.auth().onAuthStateChanged(firebaseUser => {
-        if(firebaseUser) {
+        if (firebaseUser) {
             // console.log(firebaseUser)
             console.log('logged in as: ' + firebaseUser.email);
             testUser=  firebaseUser;
             btnLogout.classList.remove('hide');
         } else {
-            console.log('not logged in')
+            console.log('not logged in');
             btnLogout.classList.add('hide');
         }
-    })
-}());
+    });
+};
