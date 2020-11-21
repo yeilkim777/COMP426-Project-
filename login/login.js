@@ -1,6 +1,7 @@
 
 (function() {
 
+
     firebase.auth().signOut();
 
     const txtEmail = document.getElementById('txtEmail');
@@ -40,6 +41,7 @@
         if(firebaseUser) {
             // console.log(firebaseUser)
             console.log('logged in as: ' + firebaseUser.email);
+            testUser=  firebaseUser;
             btnLogout.classList.remove('hide');
         } else {
             console.log('not logged in')
