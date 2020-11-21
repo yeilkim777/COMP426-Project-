@@ -196,13 +196,13 @@ export async function loadGame() {
     $root.on('click', "#time", timeUpdateBoard);//add in new player object to the array, it also returns the updated array
     $root.on('click', "#move", moveUpdateBoard);//add in new player object to the array, it also returns the updated array
 
-    $root.append(`<div>
-        <table id = 'times'></table>
-    </div>`)
+    // $root.append(`<div>
+    //     <table id = 'times'></table>
+    // </div>`)
 
-    $root.append(`<div>
-        <table id = 'moves'></table>
-    </div>`)
+    // $root.append(`<div>
+    //     <table id = 'moves'></table>
+    // </div>`)
     // create keyboard functionality all of them
 
 }
@@ -548,7 +548,7 @@ export async function timeUpdateBoard() {
     */
     //timeScoreBoard.forEach(e => {
 
-    for (let i =0; i < 10; i++) {
+    for (let i =0; i < 10 && i < timeScoreBoard.length; i++) {
         let e = timeScoreBoard[i]
         let timeRow = document.createElement("tr")
         let timeData0 = document.createElement("td")
@@ -609,7 +609,7 @@ export async function moveUpdateBoard() {
     moveTable.append(moveRowHeader)
 
     //moveScoreBoard.forEach(e => {
-    for (let i =0; i < 10; i++) {
+    for (let i =0; i < 10 && i < moveScoreBoard.length; i++) {
         let e = moveScoreBoard[i]
         let moveRow = document.createElement("tr")
         let moveData0 = document.createElement("td")

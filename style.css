@@ -32,3 +32,9 @@ button {
     width: 100px;
     height: 75px
 }
+
+#scores {
+    position: relative;
+    left: 700px;
+    top: -900px
+}
