@@ -1,6 +1,6 @@
 import { levelArray } from "./getLevel.js"
 import { boardGet, boardSet } from "./backend-firestore.js"
-//import { testUser } from "./login/login.js"
+//import { firebaseUser } from "./login/login.js"
 
 
 let x = 13;
@@ -8,7 +8,8 @@ let y = 13;
 let board = [];
 
 let player = {
-    name: 'philip kim',//substring(0,testUser.email.indexOf('@')),
+    //name: "substring(0,firebaseUser.email.indexOf('@'))",
+    name: "player.name",
     x: 0,
     y: 0,
     moves: 0,
@@ -40,15 +41,46 @@ let myTime = null;
 export async function loadGame() {
 
     const $root = $('#root')
-    //div id = board width 650px, no margin
     timeScoreBoard = await getTimeBoard(player.level);
     moveScoreBoard = await getMoveBoard(player.level);
+    let timetable = document.createElement('table')
+    timetable.id = 'times'
+    let movetable = document.createElement('table')
+    movetable.id = 'moves'
+    let topDiv = document.createElement('div')
+    topDiv.id = 'topDiv'
+    topDiv.style = 'display: flex; flex-direction: row; align-content: space-between'
+    topDiv.innerHTML = (`<div id = 'timeboard' style = 'align-self: flex-start'><h1>Time: ${player.time}</h1></div>`)
+    topDiv.innerHTML += (`<button id = 'time'>Save Time</button>`)
+    topDiv.innerHTML += (`<button id = 'move'>Save Move</button>`)
+    topDiv.innerHTML += (`<div id = 'moveboard' style = ''><h1>Moves: ${player.moves}</h1></div>`)
+    $root.append(topDiv)
+    let breakCol2 = document.createElement('div')
+    breakCol2.class = 'break'
+    breakCol2.style = 'flex-basis:100%'
+    $root.append(breakCol2)
+    $root.append(timetable)
     $root.append(levelBuild(player.level))
+    $root.append(movetable)
+    let breakCol = document.createElement('div')
+    breakCol.class = 'break'
+    breakCol.style = 'flex-basis:100%'
+    $root.append(breakCol)
     console.log(timeScoreBoard);
     console.log(moveScoreBoard);
+    timeTableGenerator();
+    moveTableGenerator();  
+    window.setInterval(function () {
+        timeTableGenerator(); 
+        topTime();
+        topMove();      
+    }, 5000);
 
-
-
+    window.setInterval(function () {
+        moveTableGenerator()
+        topTime();
+        topMove();
+    }, 5000);
     $(document).keydown(async function (e) {
         switch (e.keyCode) { // move to seperate function and make it return something
             case 39:
@@ -174,35 +206,31 @@ export async function loadGame() {
         }
     })
 
-    $root.append(`<div id = 'buttonPanel'>
-        <button id = 'previous'> Previous</button>
-        <button id = 'reset'>Reset</button>
-        <button id = 'next'>Next</button>
-        <button id = 'time'>Save Time</button>
-        <button id = 'move'>Save Move</button>
+    $root.append(`<div id = 'buttonPanel' style='align-self: center'>
+        <button id = 'previous' style='align-self: center'> Previous</button>
+        <button id = 'reset' style='align-self: center'>Reset</button>
+        <button id = 'next' style='align-self: center'>Next</button>
     </div>`)
+    
+    const $scores = $('#scores');
 
-    $root.append(`<div id = 'moveboard'>
-        <h1>Moves: ${player.moves}</h1>
-    </div>`)
-
-    $root.append(`<div id = 'timeboard'>
-        <h1>Time: ${player.time}</h1>
-    </div>`)
+    // place holder
+    let breakCol3 = document.createElement('div')
+    breakCol3.class = 'break'
+    breakCol3.style = 'flex-basis:100%'
+    $root.append(breakCol3)
+    
+    $root.append(`<div id = 'scorest'></div>`)
+    $root.append(`<div id = 'scoresm'></div>`)
 
     $root.on('click', "#previous", previousBoard);//self explantory
     $root.on('click', "#reset", resetBoard);
     $root.on('click', "#next", nextLevel);
     $root.on('click', "#time", timeUpdateBoard);//add in new player object to the array, it also returns the updated array
     $root.on('click', "#move", moveUpdateBoard);//add in new player object to the array, it also returns the updated array
+    topTime();
+    topMove();
 
-    // $root.append(`<div>
-    //     <table id = 'times'></table>
-    // </div>`)
-
-    // $root.append(`<div>
-    //     <table id = 'moves'></table>
-    // </div>`)
     // create keyboard functionality all of them
 
 }
@@ -212,8 +240,9 @@ export const levelBuild = function (number) {
 
     let tableDiv = document.createElement('div');
     tableDiv.setAttribute('id', 'board')
+
     let levelTable = document.createElement('table');
-    levelTable.style = 'display: inline-block'
+    levelTable.style = ''
     tableDiv.append(levelTable);
 
     //let level = getLevel();
@@ -458,6 +487,10 @@ export async function previousBoard() {
         timeScoreBoard = await getTimeBoard(player.level);
         moveScoreBoard = await getMoveBoard(player.level);
         $('#board').replaceWith(levelBuild(player.level))
+        timeTableGenerator();
+        moveTableGenerator();
+        topTime();
+        topMove();
     }
 }
 
@@ -478,6 +511,10 @@ export const resetBoard = function () {
     $moveboard.append(`<h1>Moves: ${player.moves}</h1>`);
     console.log(player.level)
     $('#board').replaceWith(levelBuild(player.level))
+    timeTableGenerator();
+    moveTableGenerator();
+    topTime();
+    topMove();
 }
 
 export async function nextLevel() {
@@ -502,11 +539,15 @@ export async function nextLevel() {
         console.log(timeScoreBoard)
         console.log(moveScoreBoard)
         $('#board').replaceWith(levelBuild(player.level))
+        timeTableGenerator();
+        moveTableGenerator();
+        topTime();
+        topMove();
     }
 }
 
 export async function timeUpdateBoard() {
-    console.log(player)
+    
     if (player.time == 0)
         return null
     let test = {
@@ -523,9 +564,11 @@ export async function timeUpdateBoard() {
     timeScoreBoard.sort(function(a,b) {
         return a.time - b.time
     })
+
+    console.log(timeScoreBoard)
     let timeTable = document.createElement("table")
     timeTable.id = "times"
-    timeTable.style = "border: 2px solid black;border-collapse: collapse;width: 15%; background-color: powderblue; float: left; text-align: center"
+    timeTable.style = "border: 2px solid black;border-collapse: collapse;width: 15%; background-color: powderblue; text-align: center"
     //timeDiv.append(timeTable)
     let timeRowHeader = document.createElement("tr")
     timeRowHeader.style = "background-color: blue; font-family: sans-serif;color: white"
@@ -579,21 +622,19 @@ export async function moveUpdateBoard() {
         "moves": player.moves,
     })
 
-    
+    moveeScoreBoard.sort(function(a,b) {
+        return a.moves - b.moves
+    })
 
     await updateBoard(player.level, 'move', moveScoreBoard)
     moveScoreBoard = await getMoveBoard(player.level);
     console.log(moveScoreBoard);
 
-    moveScoreBoard.sort(function(a,b) {
-        return a.moves - b.moves
-    }) 
-
     //let moveDiv = document.createElement("div")
     //moveDiv.id = "moves"
     let moveTable = document.createElement("table")
     moveTable.id = "moves"
-    moveTable.style = "border: 2px solid black; width: 15%; border-collapse: collapse;background-color: tomato; float: left; text-align: center"
+    moveTable.style = "border: 2px solid black; width: 15%; border-collapse: collapse;background-color: tomato; text-align: center"
     //moveDiv.append(moveTable)
     let moveRowHeader = document.createElement("tr")
     moveRowHeader.style = "background-color: red; color: white;font-family: sans-serif"
@@ -627,3 +668,129 @@ export async function moveUpdateBoard() {
     document.getElementById("moves").replaceWith(moveTable)
 }
 
+export const timeTableGenerator = function () {
+
+    timeScoreBoard.sort(function(a,b) {
+        return a.time - b.time
+    })
+    let timeTable = document.createElement("table")
+    timeTable.id = "times"
+    timeTable.style = "border: 2px solid black;border-collapse: collapse;width: 15%; background-color: powderblue;text-align: center"
+    //timeDiv.append(timeTable)
+    let timeRowHeader = document.createElement("tr")
+    timeRowHeader.style = "background-color: blue; font-family: sans-serif;color: white"
+    let timeHeader0 = document.createElement("th")
+    timeHeader0.innerText = ""
+    let timeHeader1 = document.createElement("th")
+    timeHeader1.innerText = "Player"
+    let timeHeader2 = document.createElement("th")
+    timeHeader2.innerText = "Time"
+
+    timeRowHeader.append(timeHeader0)
+    timeRowHeader.append(timeHeader1)
+    timeRowHeader.append(timeHeader2)
+    timeTable.append(timeRowHeader)
+
+    /*
+    lettimeTable2 = document.createElement("ol")
+    timeTable2.id = "times"
+    timeTable2.style = "border: 2px solid black; width: 10%; background-color: white; float: left; text-align: center"
+    */
+    //timeScoreBoard.forEach(e => {
+
+    for (let i =0; i < 10 && i < timeScoreBoard.length; i++) {
+        let e = timeScoreBoard[i]
+        let timeRow = document.createElement("tr")
+        let timeData0 = document.createElement("td")
+        timeData0.innerText = `${i+1}`
+        let timeData1 = document.createElement("td")
+        timeData1.innerText = `${e.player}`
+        let timeData2 = document.createElement("td")
+        timeData2.innerText = `${e.time}`
+        timeRow.append(timeData0)
+        timeRow.append(timeData1)
+        timeRow.append(timeData2)
+        timeTable.append(timeRow)
+        /** 
+        timeRow2 = document.createElement("li")
+        timeRow2.innerText = `${e.player} ${e.time}`
+        timeTable2.append(timeRow2)
+        */
+    //});
+    }
+    document.getElementById("times").replaceWith(timeTable)  
+
+}
+
+export const moveTableGenerator = function () {
+
+    moveScoreBoard.sort(function(a,b) {
+        return a.moves - b.moves
+    })
+    let moveTable = document.createElement("table")
+    moveTable.id = "moves"
+    moveTable.style = "border: 2px solid black; width: 15%; border-collapse: collapse;background-color: tomato; text-align: center"
+    let moveRowHeader = document.createElement("tr")
+    moveRowHeader.style = "background-color: red; color: white;font-family: sans-serif"
+    let moveHeader0 = document.createElement("th")
+    moveHeader0.innerText = ""
+    let moveHeader1 = document.createElement("th")
+    moveHeader1.innerText = "Player"
+    let moveHeader2 = document.createElement("th")
+    moveHeader2.innerText = "Moves"
+    moveRowHeader.append(moveHeader0)
+    moveRowHeader.append(moveHeader1)
+    moveRowHeader.append(moveHeader2)
+    moveTable.append(moveRowHeader)
+    for (let i =0; i < 10 && i < moveScoreBoard.length; i++) {
+        let e = moveScoreBoard[i]
+        let moveRow = document.createElement("tr")
+        let moveData0 = document.createElement("td")
+        moveData0.innerText = `${i+1}`
+        let moveData1 = document.createElement("td")
+        moveData1.innerText = `${e.player}`
+        let moveData2 = document.createElement("td")
+        moveData2.innerText = `${e.moves}`
+        moveRow.append(moveData0)
+        moveRow.append(moveData1)
+        moveRow.append(moveData2)
+        moveTable.append(moveRow)
+    }
+    document.getElementById("moves").replaceWith(moveTable)
+}
+
+export const topTime = function () {
+    console.log("butter");
+    for (let i =0; i < timeScoreBoard.length; i++){
+        let rdx = timeScoreBoard[i]
+        console.log(typeof player.name);
+        if(rdx.player == player.name){
+            console.log("butter1");
+            const $scorest = $('#scorest');
+            $scorest.empty()
+            $scorest.append(`<h1>Top Time Score for ${rdx.player} : ${rdx.time}</h1>`);
+            break;
+        }
+        const $scorest = $('#scorest');
+        $scorest.empty()
+        $scorest.append(`<h1>Top Time Score for ${rdx.player} : Not Available</h1>`);
+    }
+}
+
+export const topMove = function () {
+    console.log("cheese");
+    for (let i =0; i < moveScoreBoard.length; i++){
+        let rdx = moveScoreBoard[i]
+        console.log(typeof player.name)
+        if(rdx.player == player.name){
+            console.log("cheese1");
+            const $scoresm = $('#scoresm');
+            $scoresm.empty()
+            $scoresm.append(`<h1>Top Move Score for ${rdx.player} : ${rdx.moves}</h1>`);
+            break;
+        }
+        const $scoresm = $('#scoresm');
+        $scoresm.empty()
+        $scoresm.append(`<h1>Top Move Score for ${rdx.player} : Not Available</h1>`);
+    }
+}
