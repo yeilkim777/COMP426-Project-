@@ -231,12 +231,15 @@ export async function loadGame() {
     topTime();
     topMove();
 
+
     // create keyboard functionality all of them
 
 }
 
 export const levelBuild = function (number) {
     number -= 1;
+    //$("#player").css('background-color', 'red !important;')
+
 
     let tableDiv = document.createElement('div');
     tableDiv.setAttribute('id', 'board')
@@ -258,9 +261,10 @@ export const levelBuild = function (number) {
             rowFiller.setAttribute('class', j)
 
             if (board[i][j] == 0) {
-                rowFiller.setAttribute('style', 'background-color: gray');
+                rowFiller.setAttribute('style', 'background-color: #a9a9a9');
+                //rowFiller.setAttribute('style', 'border-radius: 10px');
             } else if (board[i][j] == 1) {
-                rowFiller.setAttribute('style', 'background-color: white');
+                //rowFiller.setAttribute('style', 'background-color: white');
             } else if (board[i][j] == 2) {
                 //Player
                 rowFiller.setAttribute('class', j + ' filled');
@@ -279,18 +283,22 @@ export const levelBuild = function (number) {
         tableDiv.append(row);
         //count += 2;
     }
+    // document.getElementById('player').style.backgroundColor = 'red'
+    //$("#player").css('background-color', 'red')
     return tableDiv;
 }
 
 export async function move(dirction) {
     let findY;
     let findX;
+    //$(".filled").css('background-color', 'red')
 
     if (dirction == 'right') {
         let test = setInterval(function animate() {
             // color what ever space that color
             // Depending on how it is animated and logic; move one space at a time
             $(findY).find(findX).attr('id', '')
+            //$(findY).find(findX).attr('src', '')
 
             if (board[player.y][player.x + 1] == 0) {
                 board[player.y][player.x] = 2;
@@ -320,9 +328,50 @@ export async function move(dirction) {
                 findY = '.' + player.y;
                 findX = '.' + player.x;
                 $(findY).find(findX).attr('class', player.x + ' filled')
+                if (player.level == 2) {
+                    $(".filled").css('background-color', '#fdee73')
+                } else if (player.level == 3) {
+                    $(".filled").css('background-color', '#74bbfb')
+                } else if (player.level == 4) {
+                    $(".filled").css('background-color', '#ff7124')
+                } else if (player.level == 5) {
+                    $(".filled").css('background-color', '#ff66ff')
+                } else if (player.level == 6) {
+                    $(".filled").css('background-color', '#6600ff')
+                } else if (player.level == 7) {
+                    $(".filled").css('background-color', '#18d17b')
+                } else if (player.level == 8) {
+                    $(".filled").css('background-color', '#fe0002')
+                } else if (player.level == 9) {
+                    $(".filled").css('background-color', '#fcfc5d')
+                } else if (player.level == 10) {
+                    $(".filled").css('background-color', '#0cbfe9')
+                } else if (player.level == 11) {
+                    $(".filled").css('background-color', '#c9a0ff')
+                } else if (player.level == 12) {
+                    $(".filled").css('background-color', '#f28e1c')
+                } else if (player.level == 13) {
+                    $(".filled").css('background-color', '#fabfe4')
+                } else if (player.level == 14) {
+                    $(".filled").css('background-color', '#0add08')
+                } else if (player.level == 15) {
+                    $(".filled").css('background-color', '#ffc82a')
+                } else if (player.level == 16) {
+                    $(".filled").css('background-color', '#ffb3be')
+                } else if (player.level == 17) {
+                    $(".filled").css('background-color', '#0bf9ea')
+                } else if (player.level == 18) {
+                    $(".filled").css('background-color', '#ff7f00')
+                } else if (player.level == 19) {
+                    $(".filled").css('background-color', 'pink')
+                } else if (player.level == 20) {
+                    $(".filled").css('background-color', 'greenyellow')
+                } 
                 player.x += 1;
             }
             $(findY).find(findX).attr('id', 'player')
+            //$(findY).find(findX).attr('src', 'https://w7.pngwing.com/pngs/1023/586/png-transparent-color-wheel-complementary-colors-green-gamut-cercle-blue-orange-color.png')
+
 
         }, speed)
     } else if (dirction == 'up') {
@@ -359,6 +408,45 @@ export async function move(dirction) {
                 findY = '.' + player.y;
                 findX = '.' + player.x;
                 $(findY).find(findX).attr('class', player.x + ' filled')
+                if (player.level == 2) {
+                    $(".filled").css('background-color', '#fdee73')
+                } else if (player.level == 3) {
+                    $(".filled").css('background-color', '#74bbfb')
+                } else if (player.level == 4) {
+                    $(".filled").css('background-color', '#ff7124')
+                } else if (player.level == 5) {
+                    $(".filled").css('background-color', '#ff66ff')
+                } else if (player.level == 6) {
+                    $(".filled").css('background-color', '#6600ff')
+                } else if (player.level == 7) {
+                    $(".filled").css('background-color', '#18d17b')
+                } else if (player.level == 8) {
+                    $(".filled").css('background-color', '#fe0002')
+                } else if (player.level == 9) {
+                    $(".filled").css('background-color', '#fcfc5d')
+                } else if (player.level == 10) {
+                    $(".filled").css('background-color', '#0cbfe9')
+                } else if (player.level == 11) {
+                    $(".filled").css('background-color', '#c9a0ff')
+                } else if (player.level == 12) {
+                    $(".filled").css('background-color', '#f28e1c')
+                } else if (player.level == 13) {
+                    $(".filled").css('background-color', '#fabfe4')
+                } else if (player.level == 14) {
+                    $(".filled").css('background-color', '#0add08')
+                } else if (player.level == 15) {
+                    $(".filled").css('background-color', '#ffc82a')
+                } else if (player.level == 16) {
+                    $(".filled").css('background-color', '#ffb3be')
+                } else if (player.level == 17) {
+                    $(".filled").css('background-color', '#0bf9ea')
+                } else if (player.level == 18) {
+                    $(".filled").css('background-color', '#ff7f00')
+                } else if (player.level == 19) {
+                    $(".filled").css('background-color', 'pink')
+                } else if (player.level == 20) {
+                    $(".filled").css('background-color', 'greenyellow')
+                } 
                 player.y -= 1;
             }
             $(findY).find(findX).attr('id', 'player')
@@ -397,6 +485,45 @@ export async function move(dirction) {
                 findY = '.' + player.y;
                 findX = '.' + player.x;
                 $(findY).find(findX).attr('class', player.x + ' filled')
+                if (player.level == 2) {
+                    $(".filled").css('background-color', '#fdee73')
+                } else if (player.level == 3) {
+                    $(".filled").css('background-color', '#74bbfb')
+                } else if (player.level == 4) {
+                    $(".filled").css('background-color', '#ff7124')
+                } else if (player.level == 5) {
+                    $(".filled").css('background-color', '#ff66ff')
+                } else if (player.level == 6) {
+                    $(".filled").css('background-color', '#6600ff')
+                } else if (player.level == 7) {
+                    $(".filled").css('background-color', '#18d17b')
+                } else if (player.level == 8) {
+                    $(".filled").css('background-color', '#fe0002')
+                } else if (player.level == 9) {
+                    $(".filled").css('background-color', '#fcfc5d')
+                } else if (player.level == 10) {
+                    $(".filled").css('background-color', '#0cbfe9')
+                } else if (player.level == 11) {
+                    $(".filled").css('background-color', '#c9a0ff')
+                } else if (player.level == 12) {
+                    $(".filled").css('background-color', '#f28e1c')
+                } else if (player.level == 13) {
+                    $(".filled").css('background-color', '#fabfe4')
+                } else if (player.level == 14) {
+                    $(".filled").css('background-color', '#0add08')
+                } else if (player.level == 15) {
+                    $(".filled").css('background-color', '#ffc82a')
+                } else if (player.level == 16) {
+                    $(".filled").css('background-color', '#ffb3be')
+                } else if (player.level == 17) {
+                    $(".filled").css('background-color', '#0bf9ea')
+                } else if (player.level == 18) {
+                    $(".filled").css('background-color', '#ff7f00')
+                } else if (player.level == 19) {
+                    $(".filled").css('background-color', 'pink')
+                } else if (player.level == 20) {
+                    $(".filled").css('background-color', 'greenyellow')
+                } 
                 player.x -= 1;
             }
             $(findY).find(findX).attr('id', 'player')
@@ -436,6 +563,45 @@ export async function move(dirction) {
                 findY = '.' + player.y;
                 findX = '.' + player.x;
                 $(findY).find(findX).attr('class', player.x + ' filled')
+                if (player.level == 2) {
+                    $(".filled").css('background-color', '#fdee73')
+                } else if (player.level == 3) {
+                    $(".filled").css('background-color', '#74bbfb')
+                } else if (player.level == 4) {
+                    $(".filled").css('background-color', '#ff7124')
+                } else if (player.level == 5) {
+                    $(".filled").css('background-color', '#ff66ff')
+                } else if (player.level == 6) {
+                    $(".filled").css('background-color', '#6600ff')
+                } else if (player.level == 7) {
+                    $(".filled").css('background-color', '#18d17b')
+                } else if (player.level == 8) {
+                    $(".filled").css('background-color', '#fe0002')
+                } else if (player.level == 9) {
+                    $(".filled").css('background-color', '#fcfc5d')
+                } else if (player.level == 10) {
+                    $(".filled").css('background-color', '#0cbfe9')
+                } else if (player.level == 11) {
+                    $(".filled").css('background-color', '#c9a0ff')
+                } else if (player.level == 12) {
+                    $(".filled").css('background-color', '#f28e1c')
+                } else if (player.level == 13) {
+                    $(".filled").css('background-color', '#fabfe4')
+                } else if (player.level == 14) {
+                    $(".filled").css('background-color', '#0add08')
+                } else if (player.level == 15) {
+                    $(".filled").css('background-color', '#ffc82a')
+                } else if (player.level == 16) {
+                    $(".filled").css('background-color', '#ffb3be')
+                } else if (player.level == 17) {
+                    $(".filled").css('background-color', '#0bf9ea')
+                } else if (player.level == 18) {
+                    $(".filled").css('background-color', '#ff7f00')
+                } else if (player.level == 19) {
+                    $(".filled").css('background-color', 'pink')
+                } else if (player.level == 20) {
+                    $(".filled").css('background-color', 'greenyellow')
+                } 
                 player.y += 1;
             }
             $(findY).find(findX).attr('id', 'player')
@@ -539,6 +705,10 @@ export async function nextLevel() {
         console.log(timeScoreBoard)
         console.log(moveScoreBoard)
         $('#board').replaceWith(levelBuild(player.level))
+        $(".filled").css('background-color', 'red')
+        //$('.filled').css({"background-color": "red !important"})
+        //document.getElementById("player").cssText = 'background-color: red !important'
+
         timeTableGenerator();
         moveTableGenerator();
         topTime();
