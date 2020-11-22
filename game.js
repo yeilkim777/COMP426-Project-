@@ -140,6 +140,7 @@ export async function loadGame() {
                 }
                 break;
             case 37:
+                e.preventDefault
                 if (!player.won) {
                     if (firstMove) {
                         stopWatch = Date.now();
@@ -238,7 +239,6 @@ export async function loadGame() {
 
 export const levelBuild = function (number) {
     number -= 1;
-    //$("#player").css('background-color', 'red !important;')
 
 
     let tableDiv = document.createElement('div');
@@ -283,15 +283,13 @@ export const levelBuild = function (number) {
         tableDiv.append(row);
         //count += 2;
     }
-    // document.getElementById('player').style.backgroundColor = 'red'
-    //$("#player").css('background-color', 'red')
+
     return tableDiv;
 }
 
 export async function move(dirction) {
     let findY;
     let findX;
-    //$(".filled").css('background-color', 'red')
 
     if (dirction == 'right') {
         let test = setInterval(function animate() {
@@ -705,9 +703,6 @@ export async function nextLevel() {
         console.log(timeScoreBoard)
         console.log(moveScoreBoard)
         $('#board').replaceWith(levelBuild(player.level))
-        $(".filled").css('background-color', 'red')
-        //$('.filled').css({"background-color": "red !important"})
-        //document.getElementById("player").cssText = 'background-color: red !important'
 
         timeTableGenerator();
         moveTableGenerator();
